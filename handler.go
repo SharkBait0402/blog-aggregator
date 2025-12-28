@@ -6,7 +6,7 @@ import (
 
 func handlerLogin(s *state, cmd command) error {
 	
-	if len(command.args) == 0 {
+	if len(cmd.args) == 0 {
 		return fmt.Errorf("no username was given")
 	}
 

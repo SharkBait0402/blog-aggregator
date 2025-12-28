@@ -12,7 +12,15 @@ func main() {
 		fmt.Errorf("read unsuccessful")
 	}
 
-	cfg.SetUser("Casen")
+	st := state{}
+	st.cfg = &cfg
+
+	cmds := commands {
+		handlers: make(map[string]func(*state, command) error),
+	}
+
+	cmds.register("login", handlerLogin)
+
 
 	cfg, err = config.Read()
 		if err!=nil {
