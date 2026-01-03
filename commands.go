@@ -3,9 +3,11 @@ package main
 import (
 	"github.com/sharkbait0402/blog-aggregator/internal/config"
 	"fmt"
+	"github.com/sharkbait0402/blog-aggregator/internal/database"
 )
 
 type state struct {
+	db *database.Queries
 	cfg *config.Config
 }
 

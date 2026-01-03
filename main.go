@@ -2,9 +2,13 @@ package main
 
 import (
 	"github.com/sharkbait0402/blog-aggregator/internal/config"
+	"github.com/sharkbait0402/blog-aggregator/internal/database"
 	"fmt"
 	"os"
+	"database/sql"
 )
+
+import _ "github.com/lib/pq"
 
 func main() {
 
@@ -13,14 +17,27 @@ func main() {
 		fmt.Errorf("read unsuccessful")
 	}
 
+	dbUrl:="postgres://postgres:postgres@localhost:5432/gator?sslmode=disable"
+
+	db, err := sql.Open("postgres", dbUrl) 
+	if err!= nil {
+		fmt.Errorf("open failed")
+	}
+
+	dbQueries := database.New(db)
+
 	st := state{}
 	st.cfg = &cfg
+	st.db = dbQueries
 
 	cmds := commands {
 		handlers: make(map[string]func(*state, command) error),
 	}
 
 	cmds.register("login", handlerLogin)
+	cmds.register("register", handlerRegister)
+	cmds.register("reset", handlerReset)
+	cmds.register("users", handlerUsers)
 
 	args := os.Args
 
@@ -34,15 +51,7 @@ func main() {
 		args: os.Args[2:],
 	}
 
-	if cmd.name == "login" {
-		err=handlerLogin(&st, cmd)
-
-		if err!=nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-	}
+	cmds.run(&st, cmd)
 
 	cfg, err = config.Read()
 		if err!=nil {
