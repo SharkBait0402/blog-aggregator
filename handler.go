@@ -134,3 +134,8 @@ func handlerAgg(s *state, cmd command) error {
 	return nil
 
 }
+
+func handlerAddFeed(s *state, cmd command) error {
+
+	return nil
+}
