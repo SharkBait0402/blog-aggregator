@@ -39,6 +39,8 @@ func main() {
 	cmds.register("reset", handlerReset)
 	cmds.register("users", handlerUsers)
 	cmds.register("agg", handlerAgg)
+	cmds.register("addfeed", handlerAddFeed)
+	cmds.register("feeds", handlerFeeds)
 	
 
 	args := os.Args
@@ -60,6 +62,6 @@ func main() {
 			fmt.Errorf("read unsuccessful")
 		}
 
-	fmt.Printf("%+v\n", cfg)
+	// fmt.Printf("%+v\n", cfg)
 
 }

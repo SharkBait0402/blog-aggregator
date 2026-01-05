@@ -120,7 +120,7 @@ func handlerUsers(s *state, cmd command) error {
 }
 
 func handlerAgg(s *state, cmd command) error {
-
+	
 	url:="https://www.wagslane.dev/index.xml"
 	
 	feed, err:= fetchFeed(context.Background(), url)
@@ -136,6 +136,65 @@ func handlerAgg(s *state, cmd command) error {
 }
 
 func handlerAddFeed(s *state, cmd command) error {
+
+	if len(cmd.args) < 2 {
+			log.Println("not enough args were given")
+			os.Exit(1)
+	}
+
+	id:=uuid.New()
+	now:=time.Now()
+	name:=cmd.args[0]
+	url:=cmd.args[1]
+
+	currentUser, err:=s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
+	if err!=nil {
+		log.Printf("failed to get current user: %w\n", err)
+		return err
+	}
+
+	params:=database.CreateFeedParams {
+		ID: id,
+		CreatedAt: now,
+		UpdatedAt: now,
+		Name: name,
+		Url: url,
+		UserID: currentUser.ID,
+	}
+
+	feed, err:=s.db.CreateFeed(context.Background(), params)
+	if err!=nil {
+		log.Printf("failed to create feed: %w\n", err)
+		return err
+	}
+
+	log.Println(feed)
+	return nil
+}
+
+func handlerFeeds(s *state, cmd command) error {
+
+	feeds, err:=s.db.GetFeeds(context.Background())
+	if err!= nil{
+		log.Println(err)
+		return err
+	}
+
+	for _, feed:=range feeds {
+		fmt.Printf("* %v\n", feed.Name)
+		fmt.Printf("* %v\n", feed.Url)
+		fmt.Printf("* %v\n\n", feed.Name_2)
+	}
+
+	return nil
+}
+
+func handlerFollow(s *state, cmd command) error {
+
+	if len(cmd.args) == 0 {
+		log.Println("no url was given")
+		return err
+	}
 
 	return nil
 }
