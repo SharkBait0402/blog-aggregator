@@ -24,5 +24,7 @@ commands:
   addfeed- given a name and url arguement, adds a feed to a users profile and follows it
   feeds- shows a list of feeds that are in the database
   following- shows list of feeds current user is following
+  agg- aggregates the feeds a user is folowing and creates post for them
+  browse- given a limit that has a default of 2, show info about post in a users profile
   reset- resets the datatbase
 
